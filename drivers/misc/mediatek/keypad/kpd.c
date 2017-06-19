@@ -145,6 +145,7 @@ static DRIVER_ATTR(kpd_call_state, S_IWUSR | S_IRUGO, kpd_show_call_state, kpd_s
 
 #if KEY_POWERSAVE
 static int now_powersave_key_state = 0;
+static int prev_powersave_key_state = 0;
 static ssize_t kpd_show_now_state(struct device_driver *ddri, char *buf)
 {
 	ssize_t res;
@@ -440,10 +441,13 @@ static void kpd_keymap_handler(unsigned long data)
 			kpd_print("report Linux keycode = %u\n", linux_keycode);
 #if KEY_POWERSAVE
 			if (linux_keycode == KEY_POWERSAVE)
-				if (pressed)
-					now_powersave_key_state = 1;
-				else
+				if (pressed) {
+					now_powersave_key_state = (1==prev_powersave_key_state)?0:1;
+					prev_powersave_key_state = 1;
+				} else {
 					now_powersave_key_state = 0;
+					prev_powersave_key_state = 0;
+				}
 #endif
 		}
 	}
