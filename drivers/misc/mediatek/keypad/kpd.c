@@ -442,12 +442,12 @@ static void kpd_keymap_handler(unsigned long data)
 #if KEY_POWERSAVE
 			if (linux_keycode == KEY_POWERSAVE)
 				if (pressed) {
-					now_powersave_key_state = (1==prev_powersave_key_state)?0:1;
-					prev_powersave_key_state = 1;
+					now_powersave_key_state = 1;
 				} else {
 					now_powersave_key_state = 0;
-					prev_powersave_key_state = 0;
 				}
+			if ((linux_keycode == 114)||(linux_keycode == 115))
+				now_powersave_key_state = 0;
 #endif
 		}
 	}
